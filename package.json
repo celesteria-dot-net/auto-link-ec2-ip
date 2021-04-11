@@ -8,7 +8,11 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "fix": "npm run -s format && npm run -s lint:fix",
+    "lint": "eslint '{bin,lib,test}/**/*.{js,ts}'",
+    "lint:fix": "eslint --fix '{bin,lib,test}/**/*.{js,ts}'",
+    "format": "prettier --write --loglevel=warn '{bin,lib,test}/**/*.{js,ts,gql,graphql,json}'"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.97.0",
