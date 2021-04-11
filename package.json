@@ -36,8 +36,10 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-route53": "^1.97.0",
+    "@aws-cdk/aws-lambda-nodejs": "^1.97.0",
     "@aws-cdk/core": "1.97.0",
+    "@aws-sdk/client-ec2": "^3.12.0",
+    "@aws-sdk/client-route-53": "^3.12.0",
     "eslint": "^7.24.0",
     "source-map-support": "^0.5.16"
   }
