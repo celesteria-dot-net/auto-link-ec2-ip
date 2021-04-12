@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ChangeResourceRecordSetsCommandOutput } from '@aws-sdk/client-route-53';
 import fetchInstances from './domains/ec2';
 import changeResourceRecordSets from './domains/route53';
