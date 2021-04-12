@@ -1,7 +1,7 @@
 import fetchInstances from './domains/ec2';
 import changeResourceRecordSets from './domains/route53';
 
-type instanceStateChangeEvent = {
+type ec2InstanceStateChangeEvent = {
   version: string;
   id: string;
   'detail-type': string;
@@ -17,7 +17,7 @@ type instanceStateChangeEvent = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const handler = async (event: instanceStateChangeEvent) => {
+export const handler = async (event: ec2InstanceStateChangeEvent) => {
   const action = (() => {
     switch (event.detail.state) {
       case 'running':
