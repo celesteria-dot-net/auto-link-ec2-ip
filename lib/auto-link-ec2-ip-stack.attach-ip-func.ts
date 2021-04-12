@@ -45,7 +45,10 @@ export const handler = async (
     ?.Value;
   const ipAddress = instance?.PublicIpAddress;
 
-  if (!action || !instance || !subDomain || !ipAddress) return undefined;
+  if (!action || !instance || !subDomain || !ipAddress)
+    return console.log(
+      'レコードの追加対象であるインスタンスではなかったので処理を終了しました。',
+    );
 
   // メモ：最後のピリオドはタイプミスではない
   const hostName = `${subDomain}.celesteria.net.`;
