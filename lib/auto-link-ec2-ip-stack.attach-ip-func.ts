@@ -47,6 +47,7 @@ export const handler = async (
 
   if (!action || !instance || !subDomain || !ipAddress) return undefined;
 
+  // メモ：最後のピリオドはタイプミスではない
   const hostName = `${subDomain}.celesteria.net.`;
   const route53Query = {
     HostedZoneId: process.env.HOSTZONEID,
@@ -57,6 +58,7 @@ export const handler = async (
           ResourceRecordSet: {
             Name: hostName,
             Type: 'A',
+            // 5分
             TTL: 60 * 5,
             ResourceRecords: [
               {
