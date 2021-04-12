@@ -1,3 +1,4 @@
+import { ChangeResourceRecordSetsCommandOutput } from '@aws-sdk/client-route-53';
 import fetchInstances from './domains/ec2';
 import changeResourceRecordSets from './domains/route53';
 
@@ -17,7 +18,9 @@ type ec2InstanceStateChangeEvent = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const handler = async (event: ec2InstanceStateChangeEvent) => {
+export const handler = async (
+  event: ec2InstanceStateChangeEvent,
+): Promise<void | ChangeResourceRecordSetsCommandOutput> => {
   const action = (() => {
     switch (event.detail.state) {
       case 'running':
