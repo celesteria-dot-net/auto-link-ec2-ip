@@ -36,6 +36,8 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
+    "@aws-cdk/aws-events": "^1.98.0",
+    "@aws-cdk/aws-events-targets": "^1.98.0",
     "@aws-cdk/aws-iam": "^1.98.0",
     "@aws-cdk/aws-lambda-nodejs": "^1.98.0",
     "@aws-cdk/aws-route53": "^1.98.0",
