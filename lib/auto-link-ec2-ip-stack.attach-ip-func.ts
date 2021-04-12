@@ -21,9 +21,9 @@ export const handler = async (event: instanceStateChangeEvent) => {
   const action = (() => {
     switch (event.detail.state) {
       case 'running':
-        return 'Upsert';
+        return 'UPSERT';
       case 'stopping':
-        return 'Delete';
+        return 'DELETE';
       default:
         return '';
     }
