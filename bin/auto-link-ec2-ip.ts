@@ -8,6 +8,6 @@ const app = new cdk.App();
 new AutoLinkEc2IpStack(app, 'AutoLinkEc2IpStack', {
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION
-  }
+    region: process.env.CDK_DEFAULT_REGION,
+  },
 });
