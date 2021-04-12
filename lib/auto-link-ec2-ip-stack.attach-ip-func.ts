@@ -26,6 +26,8 @@ export const handler = async (
     switch (event.detail.state) {
       case 'running':
         return 'UPSERT';
+      case 'shutting-down':
+      case 'terminated':
       case 'stopping':
         return 'DELETE';
       default:
