@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 import { ChangeResourceRecordSetsCommandOutput } from '@aws-sdk/client-route-53';
-import { MessageBuilder } from 'discord-webhook-node';
 import fetchInstances from './domains/ec2';
 import changeResourceRecordSets from './domains/route53';
-import sendEmbed from './domains/discord';
+import { sendEmbed, defaultEmbed as embed } from './domains/discord';
 
 type ec2InstanceStateChangeEvent = {
   version: string;
@@ -50,10 +49,20 @@ export const handler = async (
     ?.Value;
   const ipAddress = instance?.PublicIpAddress;
 
+  embed
+    .addField('インスタンスタイプ', instance?.InstanceType ?? '', true)
+    .addField('インスタンスID', instance?.InstanceId ?? '', true)
+    .addField('ライフサイクル', instance?.InstanceLifecycle ?? '', true)
+    .addField('状態', instance?.State?.Name ?? '', true);
+
+  if (!action || !instance || !subDomain || !ipAddress) {
+    embed.setDescription('インスタンスの状態が変化しました');
     await sendEmbed(embed);
+
     return console.log(
       'レコードの追加対象であるインスタンスではなかったので処理を終了しました',
     );
+  }
 
   // メモ：最後のピリオドはタイプミスではない
   const hostName = `${subDomain}.celesteria.net.`;
@@ -84,21 +93,17 @@ export const handler = async (
     console.error(err);
   });
 
-  const embedDescription =
-    action === 'UPSERT'
-      ? 'インスタンスが起動したため、IPとドメインの紐付けを行いました'
-      : 'インスタンスが終了したため、IPとドメインの紐付けを解除しました';
+  const isRunning = action === 'UPSERT';
+  const embedDescription = isRunning
+    ? 'インスタンスが起動したため、IPとドメインの紐付けを行いました'
+    : 'インスタンスが終了したため、IPとドメインの紐付けを解除しました';
+  const embedColor = isRunning ? 3447003 : 15105570
 
-  const embed = new MessageBuilder()
-    .setTitle('EC2 Instance Status Change')
-    .setColor(1127128)
+  embed
+    .setColor(embedColor)
     .setDescription(embedDescription)
     .addField('ドメイン名', hostName, true)
-    .addField('IPアドレス', instance.PublicIpAddress ?? '', true)
-    .addField('状態遷移の理由', instance.StateTransitionReason ?? '')
-    .addField('インスタンスタイプ', instance.InstanceType ?? '', true)
-    .addField('インスタンスID', instance.InstanceId ?? '', true)
-    .addField('ライフサイクル', instance.InstanceLifecycle ?? '', true);
+    .addField('IPアドレス', instance.PublicIpAddress ?? '', true);
 
   await sendEmbed(embed);
 };
