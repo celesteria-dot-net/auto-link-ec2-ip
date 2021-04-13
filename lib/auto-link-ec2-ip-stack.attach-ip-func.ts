@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 import { ChangeResourceRecordSetsCommandOutput } from '@aws-sdk/client-route-53';
+import { MessageBuilder } from 'discord-webhook-node';
 import fetchInstances from './domains/ec2';
 import changeResourceRecordSets from './domains/route53';
+import sendEmbed from './domains/discord';
 
 type ec2InstanceStateChangeEvent = {
   version: string;
@@ -77,5 +79,29 @@ export const handler = async (
     },
   };
 
-  return changeResourceRecordSets(route53Query);
+  await changeResourceRecordSets(route53Query).catch((err) => {
+    console.error('Route53のリソースレコードを変更できませんでした');
+    console.error(err);
+  });
+
+  const embedDescription =
+    action === 'UPSERT'
+      ? 'インスタンスが起動したため、IPとドメインの紐付けを行いました'
+      : 'インスタンスが終了したため、IPとドメインの紐付けを解除しました';
+
+  const embed = new MessageBuilder()
+    .setTitle('EC2 Instance Status Change')
+    .setColor(1127128)
+    .setDescription(embedDescription)
+    .addField('ドメイン名', hostName, true)
+    .addField('IPアドレス', instance.PublicIpAddress ?? '', true)
+    .addField('状態遷移の理由', instance.StateTransitionReason ?? '')
+    .addField('インスタンスタイプ', instance.InstanceType ?? '', true)
+    .addField('インスタンスID', instance.InstanceId ?? '', true)
+    .addField('ライフサイクル', instance.InstanceLifecycle ?? '', true);
+
+  await sendEmbed(embed).catch((err) => {
+    console.error('DiscordにEmbedを送信できませんでした');
+    console.error(err);
+  });
 };
