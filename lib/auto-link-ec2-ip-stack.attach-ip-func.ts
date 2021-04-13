@@ -50,7 +50,7 @@ export const handler = async (
     ?.Value;
   const ipAddress = instance?.PublicIpAddress;
 
-  if (!action || !instance || !subDomain || !ipAddress)
+    await sendEmbed(embed);
     return console.log(
       'レコードの追加対象であるインスタンスではなかったので処理を終了しました。',
     );
@@ -100,8 +100,5 @@ export const handler = async (
     .addField('インスタンスID', instance.InstanceId ?? '', true)
     .addField('ライフサイクル', instance.InstanceLifecycle ?? '', true);
 
-  await sendEmbed(embed).catch((err) => {
-    console.error('DiscordにEmbedを送信できませんでした');
-    console.error(err);
-  });
+  await sendEmbed(embed);
 };
