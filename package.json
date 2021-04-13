@@ -46,6 +46,7 @@
     "@aws-sdk/client-route-53": "^3.12.0",
     "discord-webhook-node": "^1.1.8",
     "eslint": "^7.24.0",
-    "source-map-support": "^0.5.16"
+    "source-map-support": "^0.5.16",
+    "ts-dotenv": "^0.8.3"
   }
 }
