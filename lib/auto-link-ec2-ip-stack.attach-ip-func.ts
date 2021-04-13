@@ -22,7 +22,7 @@ type ec2InstanceStateChangeEvent = {
 // eslint-disable-next-line import/prefer-default-export
 export const handler = async (
   event: ec2InstanceStateChangeEvent,
-): Promise<void | ChangeResourceRecordSetsCommandOutput> => {
+): Promise<void> => {
   const action = (() => {
     switch (event.detail.state) {
       case 'running':
@@ -97,7 +97,7 @@ export const handler = async (
   const embedDescription = isRunning
     ? 'インスタンスが起動したため、IPとドメインの紐付けを行いました'
     : 'インスタンスが終了したため、IPとドメインの紐付けを解除しました';
-  const embedColor = isRunning ? 3447003 : 15105570
+  const embedColor = isRunning ? 3447003 : 15105570;
 
   embed
     .setColor(embedColor)
@@ -105,5 +105,5 @@ export const handler = async (
     .addField('ドメイン名', hostName, true)
     .addField('IPアドレス', instance.PublicIpAddress ?? '', true);
 
-  await sendEmbed(embed);
+  return sendEmbed(embed);
 };
