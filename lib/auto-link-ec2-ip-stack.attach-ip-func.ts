@@ -52,7 +52,7 @@ export const handler = async (
 
     await sendEmbed(embed);
     return console.log(
-      'レコードの追加対象であるインスタンスではなかったので処理を終了しました。',
+      'レコードの追加対象であるインスタンスではなかったので処理を終了しました',
     );
 
   // メモ：最後のピリオドはタイプミスではない
