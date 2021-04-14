@@ -16,7 +16,7 @@ type ec2InstanceStateChangeEvent = {
   resources: string[];
   detail: {
     'instance-id': string;
-    state: 'running' | 'stopping';
+    state: 'running' | 'stopping' | 'shutting-down';
   };
 };
 
@@ -48,7 +48,7 @@ export const handler = async (
 
   if (!instance || !subDomain || !ipAddress) {
     embed.setDescription(
-      'インスタンスの状態が変化しましたが、レコードの追加対象であるインスタンスではありませんでした',
+      'インスタンスが起動・停止・終了しましたが、レコードの追加対象であるインスタンスではありませんでした',
     );
     await sendEmbed(embed);
 
@@ -93,7 +93,7 @@ export const handler = async (
 
   const embedDescription = isRunning
     ? 'インスタンスが起動したため、IPとドメインの紐付けを行いました'
-    : 'インスタンスが終了したため、IPとドメインの紐付けを解除しました';
+    : 'インスタンスが停止・終了したため、IPとドメインの紐付けを解除しました';
   const embedColor = isRunning ? 3447003 : 15105570;
 
   embed
