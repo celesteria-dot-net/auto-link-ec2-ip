@@ -87,7 +87,7 @@ export const handler = async (
       console.error(err);
     }).finally(() => {
       console.log(`インスタンスID: ${instance.InstanceId}`)
-      console.log(`インスタンスの状態: ${instance.State}`)
+      console.log(`インスタンスの状態: ${instance.State?.Name}`)
     });
 
   const embedDescription = isRunning
