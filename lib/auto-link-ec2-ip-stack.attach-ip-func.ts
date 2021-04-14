@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable no-console */
+import { MessageBuilder } from 'discord-webhook-node';
 import fetchInstances from './domains/ec2';
 import changeResourceRecordSets from './domains/route53';
-import { sendEmbed, defaultEmbed as embed } from './domains/discord';
+import sendEmbed from './domains/discord';
 
 type ec2InstanceStateChangeEvent = {
   version: string;
