@@ -14,7 +14,7 @@ type ec2InstanceStateChangeEvent = {
   resources: string[];
   detail: {
     'instance-id': string;
-    state: string;
+    state: "running" | "stopping";
   };
 };
 
@@ -22,18 +22,8 @@ type ec2InstanceStateChangeEvent = {
 export const handler = async (
   event: ec2InstanceStateChangeEvent,
 ): Promise<void> => {
-  const action = (() => {
-    switch (event.detail.state) {
-      case 'running':
-        return 'UPSERT';
-      case 'shutting-down':
-      case 'terminated':
-      case 'stopping':
-        return 'DELETE';
-      default:
-        return '';
-    }
-  })();
+  const isRunning = event.detail.state === "running"
+  const action = isRunning ? "UPSERT" : "DELETE"
 
   const query = {
     InstanceIds: [event.detail['instance-id']],
@@ -54,8 +44,8 @@ export const handler = async (
     .addField('ライフサイクル', instance?.InstanceLifecycle ?? '', true)
     .addField('状態', instance?.State?.Name ?? '', true);
 
-  if (!action || !instance || !subDomain || !ipAddress) {
-    embed.setDescription('インスタンスの状態が変化しました');
+  if (!instance || !subDomain || !ipAddress) {
+    embed.setDescription('インスタンスの状態が変化しましたが、レコードの追加対象であるインスタンスではありませんでした');
     await sendEmbed(embed);
 
     return console.log(
@@ -92,7 +82,6 @@ export const handler = async (
     console.error(err);
   });
 
-  const isRunning = action === 'UPSERT';
   const embedDescription = isRunning
     ? 'インスタンスが起動したため、IPとドメインの紐付けを行いました'
     : 'インスタンスが終了したため、IPとドメインの紐付けを解除しました';

@@ -42,6 +42,9 @@ export class AutoLinkEc2IpStack extends cdk.Stack {
       eventPattern: {
         source: ['aws.ec2'],
         detailType: ['EC2 Instance State-change Notification'],
+        detail: {
+          state: ["running", "stopping"]
+        }
       },
     }).addTarget(new LambdaFunction(attachIpFunc));
   }
