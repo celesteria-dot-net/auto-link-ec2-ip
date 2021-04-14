@@ -49,14 +49,13 @@ export const handler = async (
     .addField('IPアドレス', `${instance?.PublicIpAddress}`, true);
 
   if (!instance || !subDomain || !ipAddress) {
-    embed.setDescription(
-      'インスタンスが起動・停止・終了しましたが、レコードの追加対象であるインスタンスではありませんでした',
-    );
+    const message = `インスタンスが${
+      isRunning ? '起動' : '停止・終了'
+    }しましたが、レコードの追加対象であるインスタンスではありませんでした`;
+    embed.setDescription(message);
     await sendEmbed(embed);
 
-    return console.log(
-      'レコードの追加対象であるインスタンスではなかったので処理を終了しました',
-    );
+    return console.log(message);
   }
 
   // メモ：最後のピリオドはタイプミスではない
@@ -102,7 +101,7 @@ export const handler = async (
   embed
     .setColor(embedColor)
     .setDescription(embedDescription)
-    .addField('ドメイン名', hostName, true)
+    .addField('ドメイン名', hostName, true);
 
   return sendEmbed(embed);
 };
