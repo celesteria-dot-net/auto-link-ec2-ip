@@ -45,7 +45,8 @@ export const handler = async (
     .addField('インスタンスタイプ', `${instance?.InstanceType}`, true)
     .addField('インスタンスID', `${instance?.InstanceId}`, true)
     .addField('ライフサイクル', `${instance?.InstanceLifecycle}`, true)
-    .addField('状態', `${instance?.State?.Name}`, true);
+    .addField('状態', `${instance?.State?.Name}`, true)
+    .addField('IPアドレス', `${instance?.PublicIpAddress}`, true);
 
   if (!instance || !subDomain || !ipAddress) {
     embed.setDescription(
@@ -102,7 +103,6 @@ export const handler = async (
     .setColor(embedColor)
     .setDescription(embedDescription)
     .addField('ドメイン名', hostName, true)
-    .addField('IPアドレス', `${instance.PublicIpAddress}`, true);
 
   return sendEmbed(embed);
 };
