@@ -40,11 +40,12 @@ export const handler = async (
     ?.Value;
   const ipAddress = instance?.PublicIpAddress;
 
-  embed
-    .addField('インスタンスタイプ', instance?.InstanceType ?? 'undefined', true)
-    .addField('インスタンスID', instance?.InstanceId ?? 'undefined', true)
-    .addField('ライフサイクル', instance?.InstanceLifecycle ?? 'undefined', true)
-    .addField('状態', instance?.State?.Name ?? 'undefined', true);
+  const embed = new MessageBuilder()
+    .setTitle('EC2 Instance Status Change')
+    .addField('インスタンスタイプ', `${instance?.InstanceType}`, true)
+    .addField('インスタンスID', `${instance?.InstanceId}`, true)
+    .addField('ライフサイクル', `${instance?.InstanceLifecycle}`, true)
+    .addField('状態', `${instance?.State?.Name}`, true);
 
   if (!instance || !subDomain || !ipAddress) {
     embed.setDescription(
@@ -86,9 +87,10 @@ export const handler = async (
     .catch((err) => {
       console.error('Route53のリソースレコードを変更できませんでした');
       console.error(err);
-    }).finally(() => {
-      console.log(`インスタンスID: ${instance.InstanceId}`)
-      console.log(`インスタンスの状態: ${instance.State?.Name}`)
+    })
+    .finally(() => {
+      console.log(`インスタンスID: ${instance.InstanceId}`);
+      console.log(`インスタンスの状態: ${instance.State?.Name}`);
     });
 
   const embedDescription = isRunning
@@ -100,7 +102,7 @@ export const handler = async (
     .setColor(embedColor)
     .setDescription(embedDescription)
     .addField('ドメイン名', hostName, true)
-    .addField('IPアドレス', instance.PublicIpAddress ?? 'undefined', true);
+    .addField('IPアドレス', `${instance.PublicIpAddress}`, true);
 
   return sendEmbed(embed);
 };
