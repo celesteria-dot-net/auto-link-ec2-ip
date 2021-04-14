@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable no-console */
 import fetchInstances from './domains/ec2';
 import changeResourceRecordSets from './domains/route53';
@@ -79,10 +80,15 @@ export const handler = async (
     },
   };
 
-  await changeResourceRecordSets(route53Query).catch((err) => {
-    console.error('Route53のリソースレコードを変更できませんでした');
-    console.error(err);
-  });
+  await changeResourceRecordSets(route53Query)
+    .then(() => console.log('Route53のリソースレコードを変更しました'))
+    .catch((err) => {
+      console.error('Route53のリソースレコードを変更できませんでした');
+      console.error(err);
+    }).finally(() => {
+      console.log(`インスタンスID: ${instance.InstanceId}`)
+      console.log(`インスタンスの状態: ${instance.State}`)
+    });
 
   const embedDescription = isRunning
     ? 'インスタンスが起動したため、IPとドメインの紐付けを行いました'
