@@ -14,7 +14,7 @@ type ec2InstanceStateChangeEvent = {
   resources: string[];
   detail: {
     'instance-id': string;
-    state: "running" | "stopping";
+    state: 'running' | 'stopping';
   };
 };
 
@@ -22,8 +22,8 @@ type ec2InstanceStateChangeEvent = {
 export const handler = async (
   event: ec2InstanceStateChangeEvent,
 ): Promise<void> => {
-  const isRunning = event.detail.state === "running"
-  const action = isRunning ? "UPSERT" : "DELETE"
+  const isRunning = event.detail.state === 'running';
+  const action = isRunning ? 'UPSERT' : 'DELETE';
 
   const query = {
     InstanceIds: [event.detail['instance-id']],
@@ -45,7 +45,9 @@ export const handler = async (
     .addField('状態', instance?.State?.Name ?? '', true);
 
   if (!instance || !subDomain || !ipAddress) {
-    embed.setDescription('インスタンスの状態が変化しましたが、レコードの追加対象であるインスタンスではありませんでした');
+    embed.setDescription(
+      'インスタンスの状態が変化しましたが、レコードの追加対象であるインスタンスではありませんでした',
+    );
     await sendEmbed(embed);
 
     return console.log(
