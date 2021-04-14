@@ -40,10 +40,10 @@ export const handler = async (
   const ipAddress = instance?.PublicIpAddress;
 
   embed
-    .addField('インスタンスタイプ', instance?.InstanceType ?? '', true)
-    .addField('インスタンスID', instance?.InstanceId ?? '', true)
-    .addField('ライフサイクル', instance?.InstanceLifecycle ?? '', true)
-    .addField('状態', instance?.State?.Name ?? '', true);
+    .addField('インスタンスタイプ', instance?.InstanceType ?? 'undefined', true)
+    .addField('インスタンスID', instance?.InstanceId ?? 'undefined', true)
+    .addField('ライフサイクル', instance?.InstanceLifecycle ?? 'undefined', true)
+    .addField('状態', instance?.State?.Name ?? 'undefined', true);
 
   if (!instance || !subDomain || !ipAddress) {
     embed.setDescription(
@@ -99,7 +99,7 @@ export const handler = async (
     .setColor(embedColor)
     .setDescription(embedDescription)
     .addField('ドメイン名', hostName, true)
-    .addField('IPアドレス', instance.PublicIpAddress ?? '', true);
+    .addField('IPアドレス', instance.PublicIpAddress ?? 'undefined', true);
 
   return sendEmbed(embed);
 };
