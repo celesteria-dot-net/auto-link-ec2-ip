@@ -10,6 +10,7 @@ const sendEmbed = (embed: MessageBuilder): Promise<void> =>
   webhook.send(embed).catch((err) => {
     console.error('DiscordにEmbedを送信できませんでした');
     console.error(err);
+    console.error(JSON.stringify(embed))
   });
 
 const defaultEmbed = new MessageBuilder().setTitle(
