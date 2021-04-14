@@ -13,8 +13,4 @@ const sendEmbed = (embed: MessageBuilder): Promise<void> =>
     console.error(JSON.stringify(embed))
   });
 
-const defaultEmbed = new MessageBuilder().setTitle(
-  'EC2 Instance Status Change',
-);
-
-export { sendEmbed, defaultEmbed };
+export default sendEmbed;
